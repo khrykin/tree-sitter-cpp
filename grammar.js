@@ -914,12 +914,23 @@ module.exports = grammar(C, {
       field('body', $.statement),
     ),
 
-    if_statement: $ => prec.right(seq(
-      'if',
-      optional('constexpr'),
-      field('condition', $.condition_clause),
-      field('consequence', $.statement),
-      optional(field('alternative', $.else_clause)),
+    if_statement: $ => prec.right(choice(
+      // Regular if statement (with optional constexpr)
+      seq(
+        'if',
+        optional('constexpr'),
+        field('condition', $.condition_clause),
+        field('consequence', $.statement),
+        optional(field('alternative', $.else_clause)),
+      ),
+      // C++23 if consteval (no condition, compound statement required)
+      seq(
+        'if',
+        optional('!'),
+        'consteval',
+        field('consequence', $.compound_statement),
+        optional(field('alternative', $.else_clause)),
+      ),
     )),
 
     // Using prec(1) instead of prec.dynamic(1) causes issues with the

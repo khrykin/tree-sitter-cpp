@@ -191,6 +191,45 @@ T f() {
             (identifier)))))))
 
 ================================================================================
+Consteval if statements
+================================================================================
+
+void f() {
+  if consteval { return; }
+  if consteval { return; } else { return; }
+  if !consteval { return; }
+  if ! consteval { return; } else { return; }
+}
+
+--------------------------------------------------------------------------------
+
+(translation_unit
+  (function_definition
+    type: (primitive_type)
+    declarator: (function_declarator
+      declarator: (identifier)
+      parameters: (parameter_list))
+    body: (compound_statement
+      (if_statement
+        consequence: (compound_statement
+          (return_statement)))
+      (if_statement
+        consequence: (compound_statement
+          (return_statement))
+        alternative: (else_clause
+          (compound_statement
+            (return_statement))))
+      (if_statement
+        consequence: (compound_statement
+          (return_statement)))
+      (if_statement
+        consequence: (compound_statement
+          (return_statement))
+        alternative: (else_clause
+          (compound_statement
+            (return_statement)))))))
+
+================================================================================
 If statements with declarations
 ================================================================================
 
